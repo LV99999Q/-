@@ -1,29 +1,27 @@
 <template>
   <div class="home">
-    <el-col :span="24" class="page_content">
-      <el-col :span="3" class="leftNav">
-        <!-- <navBar></navBar> -->
-      </el-col>
-      <el-col :span="21" class="view">
-        <div class="view_box">
-          <!-- <router-view></router-view> -->
-        </div>
-      </el-col>
-    </el-col>
-    <el-col :span="24" class="page_head">
-      <Top></Top>
-    </el-col>
+      <div class="homeHead">
+        <Top></Top>
+      </div>
+      <div class="homeContent">
+        <el-col :span="3" class="leftNav">
+          <navBar></navBar>
+        </el-col>
+        <el-col :span="21" class="view">
+          <div class="view_box">
+            <router-view></router-view>
+          </div>
+        </el-col>
+      </div>
   </div>
 </template>
 
 <script>
-// import Top from "../components/Home/top";
-// import Sidebar from "../components/Home/sidebar";
 
 export default {
   name: "Home",
   components: {
-    // navBar: resolve => require(["@/components/Home/navBar"], resolve),
+    navBar: resolve => require(["@/components/Home/navBar"], resolve),
     Top: resolve => require(["@/components/Home/top"], resolve)
   },
   data() {
@@ -32,6 +30,7 @@ export default {
   }
 };
 </script>
+
 <style>
 /*鼠标样式*/
 .cursor {
@@ -122,28 +121,34 @@ export default {
   border-right: none !important;
 }
 </style>
+
 <style lang="less" scoped>
 .home {
+  width: 100vw;
   height: 100vh;
-}
-.page_head {
-  position: fixed;
-  top: 0;
-}
+  overflow: hidden;
 
-.leftNav {
-  height: 100vh;
-  background: #283f65;
-}
+  .homeHead{
+    width: 100%;
+    height: 56px;
+  }
 
-.view {
-  padding: 14px;
-}
+  .homeContent{
+    width: 100%;
+    height: calc(100% - 56px);
 
-.view_box {
-  margin-top: 55px;
-  position: relative;
-  height: 880px;
-  overflow-y: auto;
+    .leftNav {
+      width: 240px;
+      height: 100%;
+      background: #283f65;
+    }
+
+    .view {
+      width: calc(100% - 240px);
+      height: 100%;
+      padding: 14px;
+      box-sizing: border-box;
+    }
+  }
 }
 </style>

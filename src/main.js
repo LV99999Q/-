@@ -63,19 +63,14 @@ Date.prototype.Format = function (fmt) { // author: meizz
 };
 // 路由拦截
 router.beforeEach((to, from, next) => {
-    if (to.name === "login") { //如果你要登录，就放行
-        next()
-    } if (to.name === "checkCode") {
+    next()
+    return
+    if (to.name === "login" || localStorage.getItem("userId")) { //如果你要登录或者验证是否登录成功
         next()
     } else {
-        //需要验证是否登录成功
-        if (localStorage.getItem("userId")) {
-            next()
-        } else {
-            next({
-                path: '/login'
-            })
-        }
+        next({
+            path: '/login'
+        })
     }
 });
 new Vue({

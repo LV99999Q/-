@@ -64,15 +64,14 @@ export default {
   },
   methods: {
     checkOut(rno) {
-            // this.$router.push("/");
-
-      this.$axios
-        .get(this.api.checkout + "?rno=" + rno)
-        .then(rsp => {
-        })
-        .catch(err => {
-          this.$message.warning(err.response.data.message);
-        });
+            this.$router.push("/");
+      // this.$axios
+      //   .get(this.api.checkout + "?rno=" + rno)
+      //   .then(rsp => {
+      //   })
+      //   .catch(err => {
+      //     this.$message.warning(err.response.data.message);
+      //   });
     },
     // 设置cookie
     setCookie(c_name, c_pwd, exdays) {
@@ -122,26 +121,32 @@ export default {
     //登录
     handleLogin() {
       this.submitForm();
-      if (this.username !== "" && this.pwd !== "") {
-        this.$axios({
-          method: "post",
-          url: this.api.dengLu,
-          data: {
-            acount: this.username,
-            password: this.pwd
-          }
-        })
-          .then(resp => {
-            if (resp.data.statusCode == 200) {
-              this.$router.push("/Home/ComponentBase");
-            } else {
-              this.alertMsg = resp.data.message;
-            }
-          })
-          .catch(err => {
-            this.alertMsg = err.response.data.message;
-          });
-      }
+      this.$router.push({
+        name: 'home'
+      });
+      return;
+
+
+      // if (this.username !== "" && this.pwd !== "") {
+      //   this.$axios({
+      //     method: "post",
+      //     url: this.api.dengLu,
+      //     data: {
+      //       acount: this.username,
+      //       password: this.pwd
+      //     }
+      //   })
+      //     .then(resp => {
+      //       if (resp.data.statusCode == 200) {
+      //         this.$router.push("/Home/ComponentBase");
+      //       } else {
+      //         this.alertMsg = resp.data.message;
+      //       }
+      //     })
+      //     .catch(err => {
+      //       this.alertMsg = err.response.data.message;
+      //     });
+      // }
     }
   }
 };

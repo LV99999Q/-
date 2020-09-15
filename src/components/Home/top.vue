@@ -15,12 +15,7 @@
           <el-col :span="4" :offset="4">
             <div class="topBtn" style="margin-left:20px;width:160px">
               <div class="imgBox">
-                <img
-                  class="ph"
-                  v-if="this.photo=='null'||this.photo=='string'"
-                  src="../../assets/ph.png"
-                />
-                <img class="ph" v-else :src="this.photo" />
+                <img class="ph" :src="this.photo" />
                 <i
                   @click="openInfoModal"
                   class="el-icon-message-solid infoTips"
@@ -38,6 +33,8 @@
         </el-col>
       </el-col>
     </el-col>
+
+    <!-- 查看信息弹框 -->
     <el-dialog
       :visible.sync="centerDialogVisible"
       id="TopModal"
@@ -76,10 +73,12 @@
 </template>
 
 <script>
+import ph from '../../assets/ph.png'
 export default {
   name: "top",
   data() {
     return {
+
       activeName: -1,
       //时间
       Datetime: "",
@@ -101,14 +100,14 @@ export default {
     },
     // 用户头像
     photo() {
-      return '';
+      return ph;
     }
   },
   methods: {
     // 退出登录，清空用户信息
     exit() {
       localStorage.clear();
-      this.$router.push("/");
+      this.$router.push("/login");
     },
     //查看信息
     openInfoModal() {
