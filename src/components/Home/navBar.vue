@@ -10,22 +10,32 @@
           <i class="el-icon-location"></i>
           <span>{{item.name}}</span>
         </template>
-        <el-menu-item-group>
-          <el-menu-item v-for="childItem in item.list" :key="childItem.name" :index="childItem.name1">{{childItem.name}}</el-menu-item>
-        </el-menu-item-group>
+        <el-menu-item
+          v-for="childItem in item.list"
+          :key="childItem.name"
+          :index="childItem.name"
+          @click="toPage(childItem.path)">
+          {{childItem.name}}
+        </el-menu-item>
       </el-submenu>
     </el-menu>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   computed: {
-     ...mapGetters({:'routerMetas'})
+    ...mapState('routeData', {
+      routerMetas: state => state.routerMetas
+    })
   },
-  created() {
-    debugger
+  methods: {
+    toPage(path) {
+      this.$router.push({
+        name: path
+      })
+    }
   }
 }
 </script>

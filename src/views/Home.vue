@@ -8,7 +8,7 @@
           <navBar></navBar>
         </el-col>
         <el-col :span="21" class="view">
-          <div class="view_box">
+          <div>
             <router-view></router-view>
           </div>
         </el-col>
@@ -146,8 +146,17 @@ export default {
     .view {
       width: calc(100% - 240px);
       height: 100%;
-      padding: 14px;
+      padding: 15px;
       box-sizing: border-box;
+      overflow: hidden;
+
+      > div {
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+        background: #ffffff;
+      }
     }
   }
 }

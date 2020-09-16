@@ -1,14 +1,17 @@
-import testRouter from '../../views/test/rouConfig'
+import testRouter from '../../views/peopleManage/rouConfig'
 
 const allRouters = [
-    {name: 'aa', list: testRouter}
+    {name: '人员管理', list: testRouter}
 ];
 
 const returnList = function(arr) {
-    return arr.map(e => e.meta)
+    return arr.map(e => {
+        return Object.assign({path: e.name}, e.meta)
+    })
 };
 
 const routerMetas = {
+    namespaced: true,
     state: {
         routerMetas: [...allRouters.map(e => {
             return {name: e.name, list: returnList(e.list)};
