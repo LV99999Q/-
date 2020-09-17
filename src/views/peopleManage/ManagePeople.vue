@@ -27,28 +27,48 @@
         <el-table-column prop="jobStatusStr" label="岗位状态" align="center"></el-table-column>
         <el-table-column label="操作" align="center"  width="190">
           <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit">修改</el-button>
-            <el-button type="text" icon="el-icon-postcard">制卡</el-button>
-            <el-button type="text" icon="el-icon-reading">查看</el-button>
+            <el-button type="text" icon="el-icon-edit" @click="changeDialog('修改', true, scope.row)">修改</el-button>
+            <el-button type="text" icon="el-icon-postcard" @click="makeCard(scope.row)">制卡</el-button>
+            <el-button type="text" icon="el-icon-reading" @click="changeDialog('查看', true, scope.row)">查看</el-button>
           </template>
         </el-table-column>
     </pageModular>
+
+    <el-dialog
+    :title="dialogManaegePeople.title"
+    :visible.sync="dialogManaegePeople.isShow"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :destroy-on-close="true"
+    top="6vh"
+    width="70%">
+      <AddPeopleInfo v-if="dialogManaegePeople.title == '新增'" @closeDialog="changeDialog('', false, null)"></AddPeopleInfo>
+      <CheckPeopleInfo v-else-if="dialogManaegePeople.title == '查看'"  @closeDialog="changeDialog('', false, null)"></CheckPeopleInfo>
+      <EditPeopleInfo v-else  @closeDialog="changeDialog('', false, null)"></EditPeopleInfo>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import { myMixin } from "@/components/public/mixin";
-import searchModular from "@/components/public/searchModular";
-import functionalModular from "@/components/public/functionalModular";
-import pageModular from "@/components/public/pageModular";
+import { myMixin } from "@/components/Public/mixin";
+import searchModular from "@/components/Public/searchModular";
+import functionalModular from "@/components/Public/functionalModular";
+import pageModular from "@/components/Public/pageModular";
 import { export_json_to_excel } from "@/loader/Export2Excel"
+import AddPeopleInfo from "@/components/ManagePeople/AddPeopleInfo"
+import CheckPeopleInfo from "@/components/ManagePeople/CheckPeopleInfo"
+import EditPeopleInfo from "@/components/ManagePeople/EditPeopleInfo"
+
 export default {
   mixins: [myMixin],
   components: {
     searchModular,
     functionalModular,
     pageModular,
+    AddPeopleInfo,
+    CheckPeopleInfo,
+    EditPeopleInfo
   },
   computed: {
     ...mapState("publicData", {
@@ -67,6 +87,11 @@ export default {
   },
   data() {
     return {
+      dialogManaegePeople: {
+        title: '',
+        isShow: false,
+        data: null
+      }, // 弹框显示状态
       searchSelect: [
         { value: "sex", label: "性别", selectOptions: [], pla: "请选择性别" },
         { value: "deptId", label: "部门", selectOptions: [], pla: "请选择部门" },
@@ -81,13 +106,14 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      let send = {
-        
-      }
+
     },
     // 新增
     add() {
-
+      this.changeDialog('新增', true)
+    },
+    changeDialog(title = '', isShow = false, data = null) {
+      Object.assign(this.dialogManaegePeople, { title, isShow, data });
     },
     // 删除
     del() {
@@ -116,7 +142,11 @@ export default {
         filename
       )
     },
-  },
+    // 制卡
+    makeCard() {
+
+    }
+  }
 };
 </script>
 
