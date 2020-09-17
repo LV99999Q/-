@@ -32,6 +32,10 @@ export default {
 </script>
 
 <style>
+.cut_line{
+  width: 100%;
+  height: 15px;
+}
 /*鼠标样式*/
 .cursor {
   cursor: pointer;
@@ -40,10 +44,6 @@ export default {
 .data_bulk {
   color: #5896e9;
   font-size: 24px;
-}
-/*分页按钮位置*/
-.pagination {
-  margin-top: 16px;
 }
 /*按钮颜色*/
 .button_bg {
@@ -120,6 +120,21 @@ export default {
 .el-menu {
   border-right: none !important;
 }
+
+.customCla{
+  color: #fefefe;
+  font-size: 14px;
+  font-weight: 700;
+}
+.customCla > th {
+  background: #547ecc!important;
+}
+/* .dialogHeight{
+   width: 100%;
+   height: 700px;
+   overflow: hidden;
+   overflow-y: scroll;
+} */
 </style>
 
 <style lang="less" scoped>

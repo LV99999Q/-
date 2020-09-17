@@ -333,7 +333,7 @@ export default {
                     }).catch(err => {
                         this.$message.error(err);
                     }).finally(() => {
-                        this.c();
+                        this.returnManage();
                     })
                 }
             });

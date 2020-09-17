@@ -1,15 +1,15 @@
 <template>
     <div id="searchModular">
         <el-form :inline="true" :model="searchModular">
-            <el-form-item v-for="item in searchInput" :key="item.value" :label="item.label">
+            <el-form-item v-for="(item) in searchInput" :key="item.value" :label="item.label">
                 <el-input v-model="searchModular[item.value]" :placeholder="item.pla"></el-input>
             </el-form-item>
-            <el-form-item v-for="item in searchSelect" :key="item.value" :label="item.label">
+            <el-form-item v-for="(item) in searchSelect" :key="item.val" :label="item.label">
                 <el-select v-model="searchModular[item.value]" :placeholder="item.pla">
                     <el-option v-for="selectOp in item.selectOptions" :key="selectOp.value" :label="selectOp.label" :value="selectOp.value"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item v-for="item in searchTimer" :key="item.value" :label="item.label">
+            <el-form-item v-for="(item) in searchTimer" :key="item.value" :label="item.label">
                 <el-date-picker
                     v-model="searchModular[item.value]"
                     :start-placeholder="item.startPla"
@@ -31,6 +31,7 @@
 export default {
     data() {
         return {
+            aa: 'aa',
             searchModular: {},
             dateType: {
                 daterange: {format: 'yyyy-MM-dd'},
@@ -41,15 +42,15 @@ export default {
     props: {
         searchInput: {
             type: Array,
-            default: () => {return []}
+            default: () => {return [];}
         },
         searchSelect: {
             type: Array,
-            default: () => {return []}
+            default: () => {return [];}
         },
         searchTimer: {
             type: Array,
-            default: () => {return []}
+            default: () => {return [];}
         },
     },
     created() {
@@ -60,18 +61,18 @@ export default {
     },
     methods: {
         init() {
-          this.searchInput.forEach(e => {
-              this.searchModular[e.value] = ''
-          });
-          this.searchTimer.forEach(e => {
-              this.searchModular[e.value] = []
-          });
-          this.searchSelect.forEach(e => {
-              this.searchModular[e.value] = null
-          });
+            this.searchInput.forEach(e => {
+                this.$set(this.searchModular, e.value, '')
+            });
+            this.searchTimer.forEach(e => {
+                this.$set(this.searchModular, e.value, [])
+            });
+            this.searchSelect.forEach(e => {
+                this.$set(this.searchModular, e.value, null)
+            });
         },
         search() {
-            this.$emit('search', this.searchSelect);
+            this.$emit('search', this.searchModular);
         }
     }
 }

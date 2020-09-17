@@ -15,6 +15,14 @@ export const myMixin = {
                 ],
                 selectedList: []
             }, //表格数据
+            MIXIN_dialogData: {
+                title: '',
+                isShow: false,
+                data: null
+            }, // 弹框显示状态
+            MIXIN_tabsData: {
+                value: ''
+            }
         }
     },
     methods: {
@@ -25,15 +33,15 @@ export const myMixin = {
         },
         // 当前页显示条数变化
         $sizeChange(val) {
-            this.MIXIN_pageData.size = val;
+            Object.assign(this.MIXIN_pageData, {size: val});
         },
         // 当前页变化
         $currentPageChange(val) {
-            this.MIXIN_pageData.currentPage = val;
+            Object.assign(this.MIXIN_pageData, {currentPage: val});
         },
         // 当前选择项发生变化，返回剩下勾选的
         $selectionChange(seselection) {
-            this.MIXIN_tableData.selectedList = seselection;
+            Object.assign(this.MIXIN_tableData, {selectedList: seselection});
         },
         // 功能组件回调
         $onBtnClick(evtSource) {
@@ -46,6 +54,10 @@ export const myMixin = {
                       return v[j]
                 })
             })
+        },
+        // TABS 改变当前选中值
+        $tabChangeVal(val) {
+            Object.assign(this.MIXIN_tabsData, {value: val});
         }
     }
 };

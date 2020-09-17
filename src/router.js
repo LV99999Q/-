@@ -21,7 +21,6 @@ export default new Router({
             path: '/home',
             name: 'home',
             component: Home,
-            redirect: '/home/managePeople',
             children: [
                 ...peopleManage,
             ]

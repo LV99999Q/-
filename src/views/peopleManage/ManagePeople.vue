@@ -35,15 +35,15 @@
     </pageModular>
 
     <el-dialog
-    :title="dialogManaegePeople.title"
-    :visible.sync="dialogManaegePeople.isShow"
+    :title="MIXIN_dialogData.title"
+    :visible.sync="MIXIN_dialogData.isShow"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :destroy-on-close="true"
     top="6vh"
     width="70%">
-      <AddPeopleInfo v-if="dialogManaegePeople.title == '新增'" @closeDialog="changeDialog('', false, null)"></AddPeopleInfo>
-      <CheckPeopleInfo v-else-if="dialogManaegePeople.title == '查看'"  @closeDialog="changeDialog('', false, null)"></CheckPeopleInfo>
+      <AddPeopleInfo v-if="MIXIN_dialogData.title == '新增'" @closeDialog="changeDialog('', false, null)"></AddPeopleInfo>
+      <CheckPeopleInfo v-else-if="MIXIN_dialogData.title == '查看'"  @closeDialog="changeDialog('', false, null)"></CheckPeopleInfo>
       <EditPeopleInfo v-else  @closeDialog="changeDialog('', false, null)"></EditPeopleInfo>
     </el-dialog>
   </div>
@@ -52,10 +52,10 @@
 <script>
 import { mapState } from "vuex";
 import { myMixin } from "@/components/Public/mixin";
+import { export_json_to_excel } from "@/loader/Export2Excel"
 import searchModular from "@/components/Public/searchModular";
 import functionalModular from "@/components/Public/functionalModular";
 import pageModular from "@/components/Public/pageModular";
-import { export_json_to_excel } from "@/loader/Export2Excel"
 import AddPeopleInfo from "@/components/ManagePeople/AddPeopleInfo"
 import CheckPeopleInfo from "@/components/ManagePeople/CheckPeopleInfo"
 import EditPeopleInfo from "@/components/ManagePeople/EditPeopleInfo"
@@ -75,7 +75,7 @@ export default {
       sex: (state) => state.sexs,
       deptId: (state) => state.depts,
       jobStatus: (state) => state.jobStatus,
-    }),
+    })
   },
   created() {
     this.searchSelect.forEach((e) => {
@@ -87,18 +87,13 @@ export default {
   },
   data() {
     return {
-      dialogManaegePeople: {
-        title: '',
-        isShow: false,
-        data: null
-      }, // 弹框显示状态
       searchSelect: [
         { value: "sex", label: "性别", selectOptions: [], pla: "请选择性别" },
         { value: "deptId", label: "部门", selectOptions: [], pla: "请选择部门" },
         { value: "jobStatus", label: "岗位状态", selectOptions: [], pla: "请选择岗位状态" }
       ], // 下拉框列表
       searchInput: [
-        { value: "inputSearch", label: "搜索值", pla: "姓名/账号/身份证号码/联系方式" },
+        { value: "inputSearch", label: "搜索值", pla: "姓名/账号/身份证号码/联系方式" }
       ], // 输入框列表
       hasFunctionalBtns: ["add", "del", "export"], // 拥有的功能模块
     };
@@ -113,7 +108,7 @@ export default {
       this.changeDialog('新增', true)
     },
     changeDialog(title = '', isShow = false, data = null) {
-      Object.assign(this.dialogManaegePeople, { title, isShow, data });
+      Object.assign(this.MIXIN_dialogData, { title, isShow, data });
     },
     // 删除
     del() {
@@ -151,13 +146,7 @@ export default {
 </script>
 
 <style lang="less">
-.customCla{
-  color: #fefefe;
-  font-size: 14px;
-  font-weight: 700;
-
-  > th {
-    background: #547ecc!important;
-  }
+.managePeople{
+  
 }
 </style>
