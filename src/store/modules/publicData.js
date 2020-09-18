@@ -26,17 +26,39 @@ const publicData = {
         ],
         // 部门
         depts: [],
+        // 部门负责人
+        deptManagers: [],
+        // 人员列表
+        peopleList: [
+            {name: 1},
+            {name: 2}
+        ]
     },
 
     mutations:{
-        setDepts (state, depts ) {
+        setDepts(state, depts ) {
             state.depts = depts;
-        }
+        },
+        setDeptManagers(state, deptManagers ) {
+            state.deptManagers = deptManagers;
+        },
+        setPeopleLists(state, peopleList ) {
+            state.peopleList = peopleList;
+        },
     },
     actions:{
+        // 设置部门
         setDepts( context, depts ) {
             context.commit( 'setDepts', depts );
-        }
+        },
+        // 设置部门负责人
+        setDeptManagers( context, deptManagers ) {
+            context.commit( 'setDeptManagers', deptManagers );
+        },
+        // 设置人员列表
+        setPeopleLists( context, peopleList ) {
+            context.commit( 'setPeopleLists', peopleList );
+        },
     },
     getters: {}
 };

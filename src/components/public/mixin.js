@@ -10,8 +10,7 @@ export const myMixin = {
             }, // 分页数据
             MIXIN_tableData: {
                 allList: [
-                    {userName: 'test', acount: '11'},
-                    {userName: 'test', acount: '22'},
+                    {userName: 'test', acount: '11'}
                 ],
                 selectedList: []
             }, //表格数据
@@ -32,15 +31,19 @@ export const myMixin = {
             this.getTableData();
         },
         // 当前页显示条数变化
-        $sizeChange(val) {
+        $sizeChange(val = 10) {
             Object.assign(this.MIXIN_pageData, {size: val});
         },
+        // 当前页显示条数变化
+        $totalChange(val = 0) {
+            Object.assign(this.MIXIN_pageData, {total: val});
+        },
         // 当前页变化
-        $currentPageChange(val) {
+        $currentPageChange(val = 1) {
             Object.assign(this.MIXIN_pageData, {currentPage: val});
         },
         // 当前选择项发生变化，返回剩下勾选的
-        $selectionChange(seselection) {
+        $selectionChange(seselection = []) {
             Object.assign(this.MIXIN_tableData, {selectedList: seselection});
         },
         // 功能组件回调

@@ -22,6 +22,8 @@ export default {
     return {
       btns: [
         { name: "新增", src: btnAdd, func: "add" },
+        { name: "新增班组负责人", src: btnAdd, func: "addTeamManager" },
+        { name: "新增班组员工", src: btnAdd, func: "addTeamPeople" },
         { name: "删除", src: btnDel, func: "del" },
         { name: "导出EXCEL", src: btnExcel, func: "export" },
       ],

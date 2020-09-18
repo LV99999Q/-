@@ -4,6 +4,7 @@
       <el-table
         stripe
         border
+        ref="tableRef"
         max-height="750"
         header-row-class-name="customCla"
         :data="tableData.allList"
@@ -58,6 +59,9 @@ export default {
     },
     sizeChange(val) {
       this.$emit("sizeChange", val);
+    },
+    clearSelection() {
+      this.$refs['tableRef'].clearSelection();
     },
     selectionChange(selection){
       this.$emit("selectionChange", selection);

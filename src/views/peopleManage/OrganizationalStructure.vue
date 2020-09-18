@@ -3,28 +3,32 @@
     <tabsModular
       :value="MIXIN_tabsData.value"
       :tabs="tabs"
-      @tabChangeVal="$tabChangeVal" >
+      @tabChangeVal="tabChange">
     </tabsModular>
     <div class="cut_line"></div>
     <functionalModular
       :hasFunctionalBtns="hasFunctionalBtns"
       @onBtnClick="$onBtnClick">
-    </functionalModular>
+    </functionalModular>  
     <pageModular
+      ref="tableModularRef"
       @sizeChange="$sizeChange"
       @currentPageChange="$currentPageChange"
       @selectionChange="$selectionChange"
       :tableData="MIXIN_tableData"
       :pageData="MIXIN_pageData">
-        <el-table-column type="selection" width="50" align="center"></el-table-column>
-        <el-table-column type="index" width="50" label="序号"></el-table-column>
-        <el-table-column prop="userName" label="部门名称" align="center"></el-table-column>
-        <el-table-column prop="acount" label="部门负责人" align="center"></el-table-column>
-        <el-table-column label="操作" align="center"  width="190">
-          <template slot-scope="scope">
-            <el-button type="text" icon="el-icon-edit" @click="changeDialog('修改', true, scope.row)">修改</el-button>
-          </template>
-        </el-table-column>
+      <el-table-column type="selection" width="50" align="center"></el-table-column>
+      <el-table-column v-if="MIXIN_tabsData.value == '部门管理'" type="index" width="50" label="序号"></el-table-column>
+      <el-table-column  prop="userName" label="部门名称" align="center"></el-table-column>
+      <el-table-column v-if="MIXIN_tabsData.value == '班组管理'" prop="acount" label="班组名称" align="center"></el-table-column>
+      <el-table-column v-if="MIXIN_tabsData.value == '班组管理'" prop="acount" label="班组编号" align="center"></el-table-column>
+      <el-table-column v-if="MIXIN_tabsData.value == '部门管理'" prop="acount" label="部门负责人" align="center"></el-table-column>
+      <el-table-column label="操作" align="center"  width="300">
+        <template slot-scope="scope">
+          <el-button v-if="MIXIN_tabsData.value == '班组管理'" type="text" icon="el-icon-edit" @click="changeDialog('班组管理内容', true, scope.row)">班组管理内容</el-button>
+          <el-button type="text" icon="el-icon-edit" @click="changeDialog(MIXIN_tabsData.value == '部门管理' ? '修改部门' : '修改班组', true, scope.row)">修改</el-button>
+        </template>
+      </el-table-column>
     </pageModular>
 
     <el-dialog
@@ -34,7 +38,21 @@
       :close-on-press-escape="false"
       :destroy-on-close="true"
       top="6vh"
-      width="50%">
+      :width="MIXIN_dialogData.title == '班组管理内容' ? '80%' : '20%'">
+      <DeptManage
+        v-if="MIXIN_dialogData.title == '添加部门' || MIXIN_dialogData.title == '修改部门'"
+        :row="MIXIN_dialogData.data"
+        @closeDialog="changeDialog('', false, null)">
+      </DeptManage>
+      <TeamManage
+        v-else-if="MIXIN_dialogData.title == '增加班组' || MIXIN_dialogData.title == '修改班组'"
+        @closeDialog="changeDialog('', false, null)">
+      </TeamManage>
+      <TeamManageDetail
+        v-else
+        :row="MIXIN_dialogData.data"
+        @closeDialog="changeDialog('', false, null)">
+      </TeamManageDetail>
     </el-dialog>
   </div>
 </template>
@@ -46,12 +64,19 @@ import { myMixin } from "@/components/Public/mixin";
 import pageModular from "@/components/Public/pageModular";
 import functionalModular from '@/components/Public/functionalModular'
 
+import DeptManage from '@/components/OrganizationalStructure/DeptManage'
+import TeamManage from '@/components/OrganizationalStructure/TeamManage'
+import TeamManageDetail from '@/components/OrganizationalStructure/TeamManageDetail'
+
 export default {
   mixins: [myMixin],
   components: {
     tabsModular,
     functionalModular,
-    pageModular
+    pageModular,
+    DeptManage,
+    TeamManage,
+    TeamManageDetail
   },
   data() {
     return {
@@ -65,7 +90,8 @@ export default {
   methods: {
     // 新增
     add() {
-      this.changeDialog('新增', true)
+      let title = this.MIXIN_tabsData.value == '部门管理' ? '添加部门' : '增加班组'; 
+      this.changeDialog(title, true)
     },
     changeDialog(title = '', isShow = false, data = null) {
       Object.assign(this.MIXIN_dialogData, { title, isShow, data });
@@ -97,6 +123,13 @@ export default {
         filename
       )
     },
+    // tab变换
+    tabChange(val) {
+      this.$selectionChange();
+      this.$refs['tableModularRef'].clearSelection()
+      this.$currentPageChange();
+      this.$tabChangeVal(val);
+    }
   }
 }
 </script>

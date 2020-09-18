@@ -11,6 +11,9 @@ export default {
   data() {
     return {}
   },
+  mounted(){
+    this.tabClick((this.tabs.length && this.tabs[0].value) || '')
+  },
   props: {
     value: {
       type: String,
@@ -24,7 +27,7 @@ export default {
   computed: {
     selectedTab: {
       get() {
-        return this.value || (this.tabs.length && this.tabs[0].value) || '';
+        return this.value;
       },
       set(newName) {
         this.$emit('tabChangeVal', newName)
@@ -34,8 +37,7 @@ export default {
   methods: {
     tabClick(newName) {
         this.selectedTab = newName;
-    },
-
+    }
   }
 }
 </script>
