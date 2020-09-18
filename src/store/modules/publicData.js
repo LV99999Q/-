@@ -29,10 +29,9 @@ const publicData = {
         // 部门负责人
         deptManagers: [],
         // 人员列表
-        peopleList: [
-            {name: 1},
-            {name: 2}
-        ]
+        peopleList: [],
+        // 地铁线
+        metroLines: [],
     },
 
     mutations:{

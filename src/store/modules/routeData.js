@@ -1,7 +1,9 @@
-import testRouter from '../../views/peopleManage/rouConfig'
+import peopleManageRouter from '../../views/peopleManage/rouConfig'
+import customerManageRouter from '../../views/customerManage/rouConfig'
 
 const allRouters = [
-    {name: '人员管理', list: testRouter}
+    {name: '人员管理', list: peopleManageRouter},
+    {name: '客户管理', list: customerManageRouter}
 ];
 
 const returnList = function(arr) {

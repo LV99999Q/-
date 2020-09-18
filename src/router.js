@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import login from './views/login'
 import Home from './views/Home'
 import peopleManage from './views/peopleManage/rouConfig'
+import customerManageRouter from './views/customerManage/rouConfig'
 
 Vue.use(Router);
 
@@ -23,6 +24,7 @@ export default new Router({
             component: Home,
             children: [
                 ...peopleManage,
+                ...customerManageRouter
             ]
         },
     ]
