@@ -1,7 +1,13 @@
 import testRouter from '../../views/peopleManage/rouConfig'
+import mouldManage from '../../views/mouldManage/rouConfig'
+import planManage from '../../views/planManage/rouConfig'
+import prodManage from '../../views/prodManage/rouConfig'
 
 const allRouters = [
-    {name: '人员管理', list: testRouter}
+    {name: '人员管理', list: testRouter},
+    {name: '模具管理', list: mouldManage},
+    {name: '计划管理', list: planManage},
+    {name: '生产管理', list: prodManage}
 ];
 
 const returnList = function(arr) {
