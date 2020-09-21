@@ -28,7 +28,7 @@ export default new Router({
             component: Home,
             children: [
                 ...peopleManage,
-                ...customerManageRouter
+                ...customerManageRouter,
                 ...mouldManage,
                 ...planManage,
                 ...prodManage,
