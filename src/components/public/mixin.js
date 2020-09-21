@@ -61,6 +61,9 @@ export const myMixin = {
         // TABS 改变当前选中值
         $tabChangeVal(val) {
             Object.assign(this.MIXIN_tabsData, {value: val});
+        },
+        $resetOption(resetVal) {
+            this[resetVal]();
         }
     }
 };

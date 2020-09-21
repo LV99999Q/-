@@ -1,9 +1,10 @@
 <template>
-  <div class="managePeople">
+  <div class="mouldInfoManage">
     <searchModular
       ref="searchModular"
       :searchSelect="searchSelect"
       :searchInput="searchInput"
+      @resetOption="$resetOption"
       @search="$getTableData">
     </searchModular>
     <functionalModular
@@ -28,37 +29,36 @@
         <el-table-column label="操作" align="center"  width="190">
           <template slot-scope="scope">
             <el-button type="text" icon="el-icon-edit" @click="changeDialog('修改', true, scope.row)">修改</el-button>
-            <el-button type="text" icon="el-icon-postcard" @click="makeCard(scope.row)">制卡</el-button>
-            <el-button type="text" icon="el-icon-reading" @click="changeDialog('查看', true, scope.row)">查看</el-button>
+            <el-button type="text" icon="el-icon-postcard" @click="print(scope.row)">打印</el-button>
+            <el-button type="text" icon="el-icon-reading" @click="makeCard(scope.row)">写卡</el-button>
           </template>
         </el-table-column>
     </pageModular>
 
     <el-dialog
-    :title="MIXIN_dialogData.title"
-    :visible.sync="MIXIN_dialogData.isShow"
-    :close-on-click-modal="false"
-    :close-on-press-escape="false"
-    :destroy-on-close="true"
-    top="6vh"
-    width="70%">
-      <AddPeopleInfo v-if="MIXIN_dialogData.title == '新增'" @closeDialog="changeDialog('', false, null)"></AddPeopleInfo>
-      <CheckPeopleInfo v-else-if="MIXIN_dialogData.title == '查看'"  @closeDialog="changeDialog('', false, null)"></CheckPeopleInfo>
-      <EditPeopleInfo v-else  @closeDialog="changeDialog('', false, null)"></EditPeopleInfo>
+      :title="MIXIN_dialogData.title"
+      :visible.sync="MIXIN_dialogData.isShow"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :destroy-on-close="true"
+      top="6vh"
+      width="70%">
+        <MouldInfoManageInfo
+          v-if="MIXIN_dialogData.isShow"
+          :row="MIXIN_dialogData.data"
+          @closeDialog="changeDialog('', false, null)">
+        </MouldInfoManageInfo>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
 import { myMixin } from "@/components/Public/mixin";
-import { export_json_to_excel } from "@/loader/Export2Excel"
+import { mapState, mapActions } from "vuex";
 import searchModular from "@/components/Public/searchModular";
 import functionalModular from "@/components/Public/functionalModular";
 import pageModular from "@/components/Public/pageModular";
-import AddPeopleInfo from "@/components/ManagePeople/AddPeopleInfo"
-import CheckPeopleInfo from "@/components/ManagePeople/CheckPeopleInfo"
-import EditPeopleInfo from "@/components/ManagePeople/EditPeopleInfo"
+import MouldInfoManageInfo from "@/components/MouldInfoManage/MouldInfoManageInfo";
 
 export default {
   mixins: [myMixin],
@@ -66,46 +66,48 @@ export default {
     searchModular,
     functionalModular,
     pageModular,
-    AddPeopleInfo,
-    CheckPeopleInfo,
-    EditPeopleInfo
+    MouldInfoManageInfo
   },
   computed: {
     ...mapState("publicData", {
-      sex: (state) => state.sexs,
-      deptId: (state) => state.depts,
-      jobStatus: (state) => state.jobStatus,
+      metroLine: (state) => state.metroLines,
+      metroLineType: (state) => state.metroLineTypes,
+      mouldState: (state) => state.mouldStates,
+      mouldManufacturer: (state) => state.mouldManufacturers,
+      mouldMaxLoop: (state) => state.mouldMaxLoops
     })
   },
   mounted() {
     this.searchSelect.forEach((e) => {
       e.selectOptions = this[e.value];
     });
-    // this.$refs.searchModular.search();
   },
   data() {
     return {
       searchSelect: [
-        { value: "sex", label: "性别", selectOptions: [], pla: "请选择性别" },
-        { value: "deptId", label: "部门", selectOptions: [], pla: "请选择部门" },
-        { value: "jobStatus", label: "岗位状态", selectOptions: [], pla: "请选择岗位状态" }
+        { value: "metroLine", label: "地铁线", selectOptions: [], pla: "请选择地铁线", resetOption: 'setMetroLineType' },
+        { value: "metroLineType", label: "类型", selectOptions: [], pla: "请选择类型" },
+        { value: "mouldState", label: "状态", selectOptions: [], pla: "请选择状态" },
+        { value: "mouldManufacturer", label: "生产厂家", selectOptions: [], pla: "请选择生产厂家" },
+        { value: "mouldMaxLoop", label: "最大循环次数", selectOptions: [], pla: "请选择最大循环次数" }
       ], // 下拉框列表
       searchInput: [
-        { value: "inputSearch", label: "搜索值", pla: "姓名/账号/身份证号码/联系方式" }
+        { value: "inputSearch", label: "模具编号", pla: "模具编号" }
       ], // 输入框列表
-      hasFunctionalBtns: ["add", "del", "export"], // 拥有的功能模块
+      hasFunctionalBtns: ["add", "del"], // 拥有的功能模块
     };
   },
   methods: {
+    ...mapActions('publicData', ['setMetroLineType']),
     // 获取表格数据
     getTableData() {
 
     },
     // 新增
     add() {
-      this.changeDialog('新增', true)
+      this.changeDialog('新增模具', true)
     },
-    changeDialog(title = '', isShow = false, data = null) {
+    changeDialog(title = '', isShow = false, data = {}) {
       Object.assign(this.MIXIN_dialogData, { title, isShow, data });
     },
     // 删除
@@ -123,28 +125,20 @@ export default {
           });
         }
     },
-    // 导出
-    export() {
-      var tHeader = ['账号', '姓名']
-      var filterVal = ['acount', 'userName']
-      var filename = '管理人员表'
-      var data = this.$formatJson(filterVal, this.MIXIN_tableData.allList);
-      export_json_to_excel(
-        tHeader,
-        data,
-        filename
-      )
+    // 打印
+    print(row) {
+
     },
-    // 制卡
-    makeCard() {
+    // 写卡
+    makeCard(row) {
 
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-.managePeople{
+.mouldInfoManage{
   
 }
 </style>
